@@ -10,10 +10,12 @@ namespace PetGuardian.API.Controllers;
 [Produces("application/json")]
 public class VeterinarioController(IVeterinarioService veterinarioService) : ControllerBase
 {
+    /// <summary>Lista todos os registros de veterinários cadastrados.</summary>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<VeterinarioResponse>), StatusCodes.Status200OK)]
     public IActionResult GetAll() => Ok(veterinarioService.GetAll());
 
+    /// <summary>Obtém um registro de veterinário pelo seu identificador único (ID).</summary>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(VeterinarioResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -39,6 +41,7 @@ public class VeterinarioController(IVeterinarioService veterinarioService) : Con
     public IActionResult GetByClinica(Guid clinicaId) =>
         Ok(veterinarioService.GetByClinicaId(clinicaId));
 
+    /// <summary>Cadastra um novo registro de veterinário na base de dados.</summary>
     [HttpPost]
     [ProducesResponseType(typeof(VeterinarioResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,6 +52,7 @@ public class VeterinarioController(IVeterinarioService veterinarioService) : Con
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
+    /// <summary>Exclui um registro de veterinário cadastrado pelo seu ID.</summary>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

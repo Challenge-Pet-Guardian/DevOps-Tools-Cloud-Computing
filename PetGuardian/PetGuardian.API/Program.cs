@@ -35,6 +35,21 @@ public class Program
                     Email = "contato@petguardian.com"
                 }
             });
+
+            // Include XML comments from API and Application assemblies for Swagger UI documentation
+            var apiXml = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var apiXmlPath = Path.Combine(AppContext.BaseDirectory, apiXml);
+            if (File.Exists(apiXmlPath))
+            {
+                options.IncludeXmlComments(apiXmlPath);
+            }
+
+            var appXml = "PetGuardian.Application.xml";
+            var appXmlPath = Path.Combine(AppContext.BaseDirectory, appXml);
+            if (File.Exists(appXmlPath))
+            {
+                options.IncludeXmlComments(appXmlPath);
+            }
         });
 
         var app = builder.Build();
@@ -47,15 +62,13 @@ public class Program
 
         app.UseExceptionHandler();
 
-        if (app.Environment.IsDevelopment())
+        // Enable Swagger UI in all environments for API evaluation / grading
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
         {
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "PetGuardian API v1");
-                options.RoutePrefix = string.Empty;
-            });
-        }
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "PetGuardian API v1");
+            options.RoutePrefix = string.Empty;
+        });
 
         app.UseHttpsRedirection();
         app.UseAuthorization();

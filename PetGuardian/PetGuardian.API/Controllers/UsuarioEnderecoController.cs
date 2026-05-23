@@ -10,20 +10,24 @@ namespace PetGuardian.API.Controllers;
 [Produces("application/json")]
 public class UsuarioEnderecoController(IUsuarioEnderecoService usuarioEnderecoService) : ControllerBase
 {
+    /// <summary>Lista todos os registros de vínculos de endereços de usuários cadastrados.</summary>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<UsuarioEnderecoResponse>), StatusCodes.Status200OK)]
     public IActionResult GetAll() => Ok(usuarioEnderecoService.GetAll());
 
+    /// <summary>Lista todos os registros de vínculos de endereços de usuários associados a um usuário específico.</summary>
     [HttpGet("by-usuario/{usuarioId:guid}")]
     [ProducesResponseType(typeof(IReadOnlyList<UsuarioEnderecoResponse>), StatusCodes.Status200OK)]
     public IActionResult GetByUsuario(Guid usuarioId) =>
         Ok(usuarioEnderecoService.GetByUsuarioId(usuarioId));
 
+    /// <summary>Lista todos os registros de vínculos de endereços de usuários associados a um endereço específico.</summary>
     [HttpGet("by-endereco/{enderecoId:guid}")]
     [ProducesResponseType(typeof(IReadOnlyList<UsuarioEnderecoResponse>), StatusCodes.Status200OK)]
     public IActionResult GetByEndereco(Guid enderecoId) =>
         Ok(usuarioEnderecoService.GetByEnderecoId(enderecoId));
 
+    /// <summary>Cadastra um novo registro de vínculo de endereço de usuário na base de dados.</summary>
     [HttpPost]
     [ProducesResponseType(typeof(UsuarioEnderecoResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

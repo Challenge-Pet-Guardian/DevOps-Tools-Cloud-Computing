@@ -233,9 +233,9 @@ services:
     image: gvenzl/oracle-xe:21-slim
     container_name: oracle-db
     environment:
-      ORACLE_PASSWORD: "OracleRoot123"
-      APP_USER: "APP_USER"
-      APP_USER_PASSWORD: "AppPassword123"
+      APP_USER: "pet_guardian"
+      APP_USER_PASSWORD: "petguardian123"
+      ORACLE_PASSWORD: "oraclepetguardian"
     volumes:
       - oracle_data:/opt/oracle/oradata
     healthcheck:
@@ -251,7 +251,12 @@ services:
       - "1521:1521"
 
   petguardian-api:
-    image: seu_usuario_dockerhub/petguardian-api:latest
+    build:
+      context: .
+      dockerfile: PetGuardian.API/Dockerfile
+      args:
+        BUILD_CONFIGURATION: Release
+    image: enzookuizumi/petguardian-api:v1
     container_name: petguardian-api
     depends_on:
       oracle-db:
@@ -259,9 +264,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_ENVIRONMENT: Staging
       ASPNETCORE_HTTP_PORTS: 8080
-      ConnectionStrings__PetGuardianOracle: "User Id=APP_USER;Password=AppPassword123;Data Source=oracle-db:1521/XEPDB1;"
+      ConnectionStrings__PetGuardianOracle: "User Id=pet_guardian;Password=petguardian123;Data Source=oracle-db:1521/XEPDB1;"
     networks:
       - challenge_net
     restart: on-failure
@@ -273,43 +278,6 @@ networks:
 volumes:
   oracle_data:
 ```
-
----
-
-## 📋 Documentação de Rotas (OpenAPI / Swagger)
-
-### 1. Endereço e Localização (Integração ViaCEP)
-| Método | Rota | Descrição | Exemplo de Payload |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/endereco` | Cadastra endereço buscando dados automaticamente via CEP. | `{ "cep": "01311000", "numero": "1100" }` |
-
-### 2. Usuários & Gamificação
-| Método | Rota | Descrição | Exemplo de Payload |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/usuario` | Cadastra um novo cuidador vinculado a um telefone existente. | `{ "nome": "Enzo", "email": "enzo@example.com", "senha": "123mudar", "telefoneId": "3fa85f64-5717-4562-b3fc-2c963f66afa6" }` |
-| `GET` | `/api/usuario/{id}/score` | Retorna o score total e tarefas concluídas pelo usuário. | *Retorna score acumulado* |
-| `GET` | `/api/usuario` | Lista todos os cuidadores cadastrados. | - |
-
-### 3. Rede de Cuidado & Convites
-| Método | Rota | Descrição | Exemplo de Payload |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/usuariopet/rede-cuidado/{usuarioId}` | Lista a rede de co-cuidadores e pets vinculados àquele usuário. | - |
-| `POST` | `/api/usuariopet/invite/by-usuario` | Convida outro usuário pelo ID (Exclusivo para Responsável Principal). | `{ "adminUsuarioId": "guid", "usuarioConvidadoId": "guid", "petId": "guid" }` |
-| `POST` | `/api/usuariopet/invite/by-email` | Convida outro usuário buscando pelo e-mail registrado. | `{ "adminUsuarioId": "guid", "email": "amigo@email.com", "petId": "guid" }` |
-
-### 4. Pets & Histórico Clínico
-| Método | Rota | Descrição | Exemplo de Payload |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/pet` | Cadastra um pet vinculado a uma Raça. | `{ "nome": "Rex", "idade": 3, "sexo": 1, "porte": 2, "racaId": "guid" }` |
-| `GET` | `/api/pet/{id}/historico` | Retorna a linha do tempo clínica e de cuidados do pet. | - |
-
-### 5. Cuidado Diário (Tarefas Prescritas)
-| Método | Rota | Descrição | Exemplo de Payload |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/tarefa` | Prescreve uma nova tarefa vinculada a um pet (sem executor). | `{ "titulo": "Dar Vacina", "pontosTarefa": 50, "descricao": "Aplicar dose 2", "prazo": "2026-06-01T12:00:00Z", "petId": "guid", "veterinarioId": "guid" }` |
-| `POST` | `/api/tarefa/{id}/concluir` | Registra a conclusão da tarefa pelo usuário, gerando os pontos para o score de quem concluiu. | `{ "usuarioId": "guid" }` |
-
----
 
 ## 📖 Instruções de Instalação e Execução na VM (How To)
 
@@ -353,3 +321,155 @@ docker push enzookuizumi/petguardian-api:v1
    ```
 6. **Acesse remotamente o Swagger da API via IP público:**
    * URL: `http://<IP_PUBLICO_DA_VM>:8080/index.html`
+
+---
+
+## 📋 Documentação de Rotas (OpenAPI / Swagger)
+
+### Usuários
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/usuario | Listar todos os usuários |
+| GET | /api/usuario/{id} | Buscar usuário por ID |
+| GET | /api/usuario/by-email | Buscar usuário por e-mail |
+| GET | /api/usuario/{id}/score | Buscar score e progresso do usuário |
+| POST | /api/usuario | Cadastrar um novo usuário |
+| DELETE | /api/usuario/{id} | Remover um usuário |
+
+### Pets
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/pet | Listar todos os pets |
+| GET | /api/pet/{id} | Buscar pet por ID |
+| GET | /api/pet/by-raca/{racaId} | Buscar pets por raça |
+| GET | /api/pet/{id}/historico | Buscar histórico clínico e de cuidados do pet |
+| POST | /api/pet | Cadastrar um novo pet |
+| DELETE | /api/pet/{id} | Remover um pet |
+
+### Rede de Cuidado (UsuarioPet)
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/usuariopet | Listar todos os vínculos de rede de cuidado |
+| GET | /api/usuariopet/by-usuario/{usuarioId} | Listar pets vinculados a um usuário |
+| GET | /api/usuariopet/by-pet/{petId} | Listar cuidadores vinculados a um pet |
+| GET | /api/usuariopet/rede-cuidado/{usuarioId} | Buscar rede de cuidado colaborativo de um usuário |
+| POST | /api/usuariopet | Vincular um usuário a um pet |
+| POST | /api/usuariopet/invite/by-usuario | Convidar cuidador por ID (Exclusivo para Responsável Principal) |
+| POST | /api/usuariopet/invite/by-email | Convidar cuidador por E-mail (Exclusivo para Responsável Principal) |
+| DELETE | /api/usuariopet/{usuarioId}/{petId} | Remover cuidador da rede de um pet |
+
+### Tarefas de Cuidado
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/tarefa | Listar todas as tarefas |
+| GET | /api/tarefa/{id} | Buscar tarefa por ID |
+| GET | /api/tarefa/by-pet/{petId} | Listar tarefas de um pet |
+| GET | /api/tarefa/by-usuario/{usuarioId} | Listar tarefas vinculadas a um usuário |
+| GET | /api/tarefa/by-veterinario/{veterinarioId} | Listar tarefas prescritas por um veterinário |
+| GET | /api/tarefa/by-status/{statusId} | Listar tarefas por status |
+| POST | /api/tarefa | Prescrever/cadastrar uma nova tarefa para um pet |
+| POST | /api/tarefa/{id}/concluir | Concluir tarefa (computando os pontos para o score do usuário) |
+| DELETE | /api/tarefa/{id} | Deletar uma tarefa |
+
+### Atendimentos Clínicos
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/atendimento | Listar todos os atendimentos |
+| GET | /api/atendimento/{id} | Buscar atendimento por ID |
+| GET | /api/atendimento/by-pet/{petId} | Listar atendimentos de um pet |
+| GET | /api/atendimento/by-veterinario/{veterinarioId} | Listar atendimentos por veterinário |
+| POST | /api/atendimento | Cadastrar um novo atendimento clínico |
+| DELETE | /api/atendimento/{id} | Deletar um atendimento |
+
+### Veterinários
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/veterinario | Listar todos os veterinários |
+| GET | /api/veterinario/{id} | Buscar veterinário por ID |
+| GET | /api/veterinario/by-email | Buscar veterinário por e-mail |
+| GET | /api/veterinario/by-clinica/{clinicaId} | Listar veterinários vinculados a uma clínica |
+| POST | /api/veterinario | Cadastrar um novo veterinário |
+| DELETE | /api/veterinario/{id} | Remover um veterinário |
+
+### Clínicas Veterinárias
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/clinica | Listar todas as clínicas |
+| GET | /api/clinica/{id} | Buscar clínica por ID |
+| POST | /api/clinica | Cadastrar uma nova clínica |
+| DELETE | /api/clinica/{id} | Remover uma clínica |
+
+### Endereços
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/endereco | Listar todos os endereços |
+| GET | /api/endereco/{id} | Buscar endereço por ID |
+| POST | /api/endereco | Cadastrar endereço buscando dados automaticamente via ViaCEP |
+| DELETE | /api/endereco/{id} | Remover um endereço |
+
+### Vínculo de Endereço (UsuarioEndereco)
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/usuarioendereco | Listar todas as relações usuário-endereço |
+| GET | /api/usuarioendereco/by-usuario/{usuarioId} | Listar endereços vinculados a um usuário |
+| GET | /api/usuarioendereco/by-endereco/{enderecoId} | Listar usuários vinculados a um endereço |
+| POST | /api/usuarioendereco | Vincular um endereço a um usuário |
+| DELETE | /api/usuarioendereco/{usuarioId}/{enderecoId} | Desvincular endereço de um usuário |
+
+### Telefones
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/telefone | Listar todos os telefones |
+| GET | /api/telefone/{id} | Buscar telefone por ID |
+| POST | /api/telefone | Cadastrar um novo telefone |
+| DELETE | /api/telefone/{id} | Remover um telefone |
+
+### Raças de Pets
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/raca | Listar todas as raças |
+| GET | /api/raca/{id} | Buscar raça por ID |
+| POST | /api/raca | Cadastrar uma nova raça |
+| DELETE | /api/raca/{id} | Remover uma raça |
+
+### Cidades
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/cidade | Listar todas as cidades |
+| GET | /api/cidade/{id} | Buscar cidade por ID |
+| GET | /api/cidade/by-estado/{estadoId} | Listar cidades de um estado |
+| POST | /api/cidade | Cadastrar uma nova cidade |
+| DELETE | /api/cidade/{id} | Remover uma cidade |
+
+### Bairros
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/bairro | Listar todos os bairros |
+| GET | /api/bairro/{id} | Buscar bairro por ID |
+| GET | /api/bairro/by-cidade/{cidadeId} | Listar bairros de uma cidade |
+| POST | /api/bairro | Cadastrar um novo bairro |
+| DELETE | /api/bairro/{id} | Remover um bairro |
+
+### Estados
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/estado | Listar todos os estados |
+| GET | /api/estado/{id} | Buscar estado por ID |
+| POST | /api/estado | Cadastrar um novo estado |
+| DELETE | /api/estado/{id} | Remover um estado |
+
+### Status
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/status | Listar todos os status |
+| GET | /api/status/{id} | Buscar status por ID |
+| POST | /api/status | Cadastrar um novo status |
+| DELETE | /api/status/{id} | Remover um status |
+
+### Tipos de Atendimento
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | /api/tipoatend | Listar todos os tipos de atendimento |
+| GET | /api/tipoatend/{id} | Buscar tipo de atendimento por ID |
+| POST | /api/tipoatend | Cadastrar um novo tipo de atendimento |
+| DELETE | /api/tipoatend/{id} | Remover um tipo de atendimento |

@@ -10,10 +10,12 @@ namespace PetGuardian.API.Controllers;
 [Produces("application/json")]
 public class RacaController(IRacaService racaService) : ControllerBase
 {
+    /// <summary>Lista todos os registros de raças cadastrados.</summary>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<RacaResponse>), StatusCodes.Status200OK)]
     public IActionResult GetAll() => Ok(racaService.GetAll());
 
+    /// <summary>Obtém um registro de raça pelo seu identificador único (ID).</summary>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(RacaResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -23,6 +25,7 @@ public class RacaController(IRacaService racaService) : ControllerBase
         return raca is null ? NotFound() : Ok(raca);
     }
 
+    /// <summary>Cadastra um novo registro de raça na base de dados.</summary>
     [HttpPost]
     [ProducesResponseType(typeof(RacaResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -33,6 +36,7 @@ public class RacaController(IRacaService racaService) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
+    /// <summary>Exclui um registro de raça cadastrado pelo seu ID.</summary>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

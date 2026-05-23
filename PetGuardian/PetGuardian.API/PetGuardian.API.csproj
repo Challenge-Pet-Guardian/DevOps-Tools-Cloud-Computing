@@ -7,6 +7,8 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <RootNamespace>PetGuardian.API</RootNamespace>
         <UserSecretsId>petguardian-api-4f7ef2d8-8267-492d-9c82-a8f7f1ccf46a</UserSecretsId>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

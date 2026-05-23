@@ -10,10 +10,12 @@ namespace PetGuardian.API.Controllers;
 [Produces("application/json")]
 public class StatusController(IStatusService statusService) : ControllerBase
 {
+    /// <summary>Lista todos os registros de status cadastrados.</summary>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<StatusResponse>), StatusCodes.Status200OK)]
     public IActionResult GetAll() => Ok(statusService.GetAll());
 
+    /// <summary>Obtém um registro de status pelo seu identificador único (ID).</summary>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(StatusResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -23,6 +25,7 @@ public class StatusController(IStatusService statusService) : ControllerBase
         return status is null ? NotFound() : Ok(status);
     }
 
+    /// <summary>Cadastra um novo registro de status na base de dados.</summary>
     [HttpPost]
     [ProducesResponseType(typeof(StatusResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -33,6 +36,7 @@ public class StatusController(IStatusService statusService) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
+    /// <summary>Exclui um registro de status cadastrado pelo seu ID.</summary>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

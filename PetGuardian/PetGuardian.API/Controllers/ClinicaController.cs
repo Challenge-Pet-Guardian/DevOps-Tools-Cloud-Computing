@@ -10,10 +10,12 @@ namespace PetGuardian.API.Controllers;
 [Produces("application/json")]
 public class ClinicaController(IClinicaService clinicaService) : ControllerBase
 {
+    /// <summary>Lista todos os registros de clínicas cadastrados.</summary>
     [HttpGet]
     [ProducesResponseType(typeof(IReadOnlyList<ClinicaResponse>), StatusCodes.Status200OK)]
     public IActionResult GetAll() => Ok(clinicaService.GetAll());
 
+    /// <summary>Obtém um registro de clínica pelo seu identificador único (ID).</summary>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(ClinicaResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -23,6 +25,7 @@ public class ClinicaController(IClinicaService clinicaService) : ControllerBase
         return c is null ? NotFound() : Ok(c);
     }
 
+    /// <summary>Cadastra um novo registro de clínica na base de dados.</summary>
     [HttpPost]
     [ProducesResponseType(typeof(ClinicaResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -33,6 +36,7 @@ public class ClinicaController(IClinicaService clinicaService) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
 
+    /// <summary>Exclui um registro de clínica cadastrado pelo seu ID.</summary>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

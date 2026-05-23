@@ -42,6 +42,7 @@ public class PetController(IPetService petService) : ControllerBase
     public IActionResult GetByRaca(Guid racaId) =>
         Ok(petService.GetByRacaId(racaId));
 
+    /// <summary>Retorna a linha do tempo histórica unificada (atendimentos e tarefas concluídas) de um pet.</summary>
     [HttpGet("{id:guid}/historico")]
     [ProducesResponseType(typeof(IReadOnlyList<PetHistoricoItemResponse>), StatusCodes.Status200OK)]
     public IActionResult GetHistorico(Guid id) => Ok(petService.GetHistorico(id));
