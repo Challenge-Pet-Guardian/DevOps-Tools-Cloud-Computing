@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetGuardian.Domain.Entities;
 
@@ -8,16 +8,16 @@ public sealed class VeterinarioConfiguration : IEntityTypeConfiguration<Veterina
 {
     public void Configure(EntityTypeBuilder<Veterinario> builder)
     {
-        builder.ToTable("PG_VETERINARIOS");
+        builder.ToTable("veterinario");
         builder.HasKey(v => v.Id);
-        builder.Property(v => v.Id).HasColumnName("ID_VETERINARIO");
+        builder.Property(v => v.Id).HasColumnName("id_veterinario");
 
-        builder.Property(v => v.Nome).HasColumnName("NOME").HasMaxLength(100).IsRequired();
-        builder.Property(v => v.Email).HasColumnName("EMAIL").HasMaxLength(50).IsRequired();
+        builder.Property(v => v.Nome).HasColumnName("nome").HasMaxLength(100).IsRequired();
+        builder.Property(v => v.Email).HasColumnName("email").HasMaxLength(50).IsRequired();
         builder.HasIndex(v => v.Email).IsUnique();
-        builder.Property(v => v.Senha).HasColumnName("SENHA").HasMaxLength(20).IsRequired();
+        builder.Property(v => v.Senha).HasColumnName("senha").HasMaxLength(20).IsRequired();
 
-        builder.Property(v => v.TelefoneId).HasColumnName("ID_TELEFONE").IsRequired();
+        builder.Property(v => v.TelefoneId).HasColumnName("telefone_id_telefone").IsRequired();
         builder.HasOne(v => v.Telefone)
             .WithOne()
             .HasForeignKey<Veterinario>(v => v.TelefoneId)
@@ -25,7 +25,7 @@ public sealed class VeterinarioConfiguration : IEntityTypeConfiguration<Veterina
         builder.HasIndex(v => v.TelefoneId).IsUnique();
 
         // Nullable
-        builder.Property(v => v.ClinicaId).HasColumnName("ID_CLINICA").IsRequired(false);
+        builder.Property(v => v.ClinicaId).HasColumnName("clinica_id_clinica").IsRequired(false);
 
         builder.HasMany(v => v.Atendimentos)
             .WithOne(a => a.Veterinario)

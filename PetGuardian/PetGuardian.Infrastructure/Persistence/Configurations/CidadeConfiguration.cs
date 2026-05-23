@@ -8,19 +8,19 @@ public sealed class CidadeConfiguration : IEntityTypeConfiguration<Cidade>
 {
     public void Configure(EntityTypeBuilder<Cidade> builder)
     {
-        builder.ToTable("PG_CIDADES");
+        builder.ToTable("cidade");
         builder.HasKey(c => c.Id);
 
         builder.Property(c => c.Id)
-            .HasColumnName("ID_CIDADE");
+            .HasColumnName("id_cidade");
 
         builder.Property(c => c.NomeCidade)
-            .HasColumnName("NOME_CIDADE")
+            .HasColumnName("nome_cidade")
             .HasMaxLength(30)
             .IsRequired();
 
         builder.Property(c => c.EstadoId)
-            .HasColumnName("ID_ESTADO")
+            .HasColumnName("estado_id_estado")
             .IsRequired();
 
         builder.HasOne(c => c.Estado)

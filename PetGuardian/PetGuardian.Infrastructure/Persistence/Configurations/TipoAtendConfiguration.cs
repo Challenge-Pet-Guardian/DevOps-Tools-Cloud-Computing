@@ -8,14 +8,14 @@ public sealed class TipoAtendConfiguration : IEntityTypeConfiguration<TipoAtend>
 {
     public void Configure(EntityTypeBuilder<TipoAtend> builder)
     {
-        builder.ToTable("PG_TIPO_ATEND");
+        builder.ToTable("tipo_atend");
         builder.HasKey(t => t.Id);
 
         builder.Property(t => t.Id)
-            .HasColumnName("ID_TIPO_ATEND");
+            .HasColumnName("id_tipo_atend");
 
         builder.Property(t => t.Tipo)
-            .HasColumnName("TIPO")
+            .HasColumnName("tipo")
             .HasMaxLength(30)
             .IsRequired();
     }

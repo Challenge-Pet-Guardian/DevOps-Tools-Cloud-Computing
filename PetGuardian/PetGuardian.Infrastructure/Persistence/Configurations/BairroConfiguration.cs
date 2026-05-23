@@ -8,19 +8,19 @@ public sealed class BairroConfiguration : IEntityTypeConfiguration<Bairro>
 {
     public void Configure(EntityTypeBuilder<Bairro> builder)
     {
-        builder.ToTable("PG_BAIRROS");
+        builder.ToTable("bairro");
         builder.HasKey(b => b.Id);
 
         builder.Property(b => b.Id)
-            .HasColumnName("ID_BAIRRO");
+            .HasColumnName("id_bairro");
 
         builder.Property(b => b.NomeBairro)
-            .HasColumnName("NOME_BAIRRO")
+            .HasColumnName("nome_bairro")
             .HasMaxLength(30)
             .IsRequired();
 
         builder.Property(b => b.CidadeId)
-            .HasColumnName("ID_CIDADE")
+            .HasColumnName("cidade_id_cidade")
             .IsRequired();
 
         builder.HasOne(b => b.Cidade)

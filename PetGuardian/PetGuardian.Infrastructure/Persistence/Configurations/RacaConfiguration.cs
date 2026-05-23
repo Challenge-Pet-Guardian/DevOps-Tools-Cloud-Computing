@@ -8,14 +8,14 @@ public sealed class RacaConfiguration : IEntityTypeConfiguration<Raca>
 {
     public void Configure(EntityTypeBuilder<Raca> builder)
     {
-        builder.ToTable("PG_RACAS");
+        builder.ToTable("raca");
         builder.HasKey(r => r.Id);
 
         builder.Property(r => r.Id)
-            .HasColumnName("ID_RACA");
+            .HasColumnName("id_raca");
 
         builder.Property(r => r.NomeRaca)
-            .HasColumnName("NOME_RACA")
+            .HasColumnName("nome_raca")
             .HasMaxLength(30)
             .IsRequired();
     }

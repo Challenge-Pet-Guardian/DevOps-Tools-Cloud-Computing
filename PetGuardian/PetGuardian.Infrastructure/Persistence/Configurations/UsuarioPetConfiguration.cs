@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetGuardian.Domain.Entities;
 
@@ -8,15 +8,15 @@ public sealed class UsuarioPetConfiguration : IEntityTypeConfiguration<UsuarioPe
 {
     public void Configure(EntityTypeBuilder<UsuarioPet> builder)
     {
-        builder.ToTable("PG_USUARIO_PET");
+        builder.ToTable("usuario_pet");
         builder.HasKey(up => new { up.UsuarioId, up.PetId });
 
-        builder.Property(up => up.UsuarioId).HasColumnName("ID_USUARIO").IsRequired();
-        builder.Property(up => up.PetId).HasColumnName("ID_PET").IsRequired();
+        builder.Property(up => up.UsuarioId).HasColumnName("usuario_id_usuario").IsRequired();
+        builder.Property(up => up.PetId).HasColumnName("pet_id_pet").IsRequired();
 
         // CHECK: respon_princ IN ('0','1') — CHAR(1)
         builder.Property(up => up.ResponPrinc)
-            .HasColumnName("RESPON_PRINC")
+            .HasColumnName("respon_princ")
             .HasMaxLength(1)
             .HasConversion(
                 v => v ? "1" : "0",

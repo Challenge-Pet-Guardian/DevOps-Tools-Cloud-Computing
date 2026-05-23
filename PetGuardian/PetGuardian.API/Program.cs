@@ -36,7 +36,6 @@ public class Program
                 }
             });
 
-            // Include XML comments from API and Application assemblies for Swagger UI documentation
             var apiXml = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var apiXmlPath = Path.Combine(AppContext.BaseDirectory, apiXml);
             if (File.Exists(apiXmlPath))
@@ -62,7 +61,6 @@ public class Program
 
         app.UseExceptionHandler();
 
-        // Enable Swagger UI in all environments for API evaluation / grading
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {

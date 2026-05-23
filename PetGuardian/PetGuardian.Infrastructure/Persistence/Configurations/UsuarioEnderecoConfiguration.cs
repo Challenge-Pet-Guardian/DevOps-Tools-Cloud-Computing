@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetGuardian.Domain.Entities;
 
@@ -8,11 +8,11 @@ public sealed class UsuarioEnderecoConfiguration : IEntityTypeConfiguration<Usua
 {
     public void Configure(EntityTypeBuilder<UsuarioEndereco> builder)
     {
-        builder.ToTable("PG_USUARIO_ENDERECO");
+        builder.ToTable("usuario_endereco");
         builder.HasKey(ue => new { ue.UsuarioId, ue.EnderecoId });
 
-        builder.Property(ue => ue.UsuarioId).HasColumnName("ID_USUARIO").IsRequired();
-        builder.Property(ue => ue.EnderecoId).HasColumnName("ID_ENDERECO").IsRequired();
+        builder.Property(ue => ue.UsuarioId).HasColumnName("usuario_id_usuario").IsRequired();
+        builder.Property(ue => ue.EnderecoId).HasColumnName("endereco_id_endereco").IsRequired();
 
         builder.HasOne(ue => ue.Usuario)
             .WithMany(u => u.Enderecos)

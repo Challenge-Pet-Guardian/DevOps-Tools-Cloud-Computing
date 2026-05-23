@@ -8,14 +8,14 @@ public sealed class EstadoConfiguration : IEntityTypeConfiguration<Estado>
 {
     public void Configure(EntityTypeBuilder<Estado> builder)
     {
-        builder.ToTable("PG_ESTADOS");
+        builder.ToTable("estado");
         builder.HasKey(e => e.Id);
 
         builder.Property(e => e.Id)
-            .HasColumnName("ID_ESTADO");
+            .HasColumnName("id_estado");
 
         builder.Property(e => e.NomeEstado)
-            .HasColumnName("NOME_ESTADO")
+            .HasColumnName("nome_estado")
             .HasMaxLength(30)
             .IsRequired();
     }

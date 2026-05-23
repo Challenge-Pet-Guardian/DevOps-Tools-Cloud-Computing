@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetGuardian.Domain.Entities;
 using PetGuardian.Domain.Enums;
@@ -9,16 +9,16 @@ public sealed class PetConfiguration : IEntityTypeConfiguration<Pet>
 {
     public void Configure(EntityTypeBuilder<Pet> builder)
     {
-        builder.ToTable("PG_PETS");
+        builder.ToTable("pet");
         builder.HasKey(p => p.Id);
-        builder.Property(p => p.Id).HasColumnName("ID_PET");
+        builder.Property(p => p.Id).HasColumnName("id_pet");
 
-        builder.Property(p => p.Nome).HasColumnName("NOME").HasMaxLength(30).IsRequired();
-        builder.Property(p => p.Idade).HasColumnName("IDADE").HasColumnType("NUMBER(2)").IsRequired();
+        builder.Property(p => p.Nome).HasColumnName("nome").HasMaxLength(30).IsRequired();
+        builder.Property(p => p.Idade).HasColumnName("idade").HasColumnType("NUMBER(2)").IsRequired();
 
         // CHECK: sexo IN ('M','F')
         builder.Property(p => p.Sexo)
-            .HasColumnName("SEXO")
+            .HasColumnName("sexo")
             .HasMaxLength(1)
             .HasConversion(
                 v => v == SexoPet.Macho ? "M" : "F",
@@ -27,7 +27,7 @@ public sealed class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         // CHECK: porte IN ('GRANDE','MEDIO','PEQUENO')
         builder.Property(p => p.Porte)
-            .HasColumnName("PORTE")
+            .HasColumnName("porte")
             .HasMaxLength(10)
             .HasConversion(
                 v => v.ToString().ToUpperInvariant(),
@@ -36,14 +36,14 @@ public sealed class PetConfiguration : IEntityTypeConfiguration<Pet>
 
         // CHECK: castrado IN ('0','1') — CHAR(1)
         builder.Property(p => p.Castrado)
-            .HasColumnName("CASTRADO")
+            .HasColumnName("castrado")
             .HasMaxLength(1)
             .HasConversion(
                 v => v ? "1" : "0",
                 v => v == "1")
             .IsRequired();
 
-        builder.Property(p => p.RacaId).HasColumnName("ID_RACA").IsRequired();
+        builder.Property(p => p.RacaId).HasColumnName("raca_id_raca").IsRequired();
         builder.HasOne(p => p.Raca)
             .WithMany(r => r.Pets)
             .HasForeignKey(p => p.RacaId)
