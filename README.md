@@ -15,10 +15,11 @@
 ![Azure](https://img.shields.io/badge/Azure-VM-0078D4?logo=microsoftazure&logoColor=white&style=for-the-badge)
 
 ---
-## Repositório Github
+## Repositório Github e Vídeo Youtube
 
 [Repositório Github](https://github.com/Challenge-Pet-Guardian/DevOps-Tools-Cloud-Computing)
 
+[Vídeo Youtube](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
 ## 💡 Sobre o Produto
 
