@@ -34,7 +34,7 @@ az vm create \
   --resource-group "$RG" \
   --name "$VM" \
   --image Ubuntu2204 \
-  --size Standard_B2pls_v2 \
+  --size Standard_B2ls_v2 \
   --admin-username "$ADMIN" \
   --generate-ssh-keys \
   --output json \
