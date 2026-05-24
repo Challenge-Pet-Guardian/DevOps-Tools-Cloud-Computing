@@ -17,7 +17,7 @@
 ---
 ## Repositório Github e Vídeo Youtube
 
-[Repositório Github](https://github.com/Challenge-Pet-Guardian/DevOps-Tools-Cloud-Computing) | [Vídeo Youtube](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+[Repositório Github](https://github.com/Challenge-Pet-Guardian/DevOps-Tools-Cloud-Computing) | [Vídeo Youtube](https://youtu.be/Xzz9GBONKa4)
 
 ---
 
@@ -235,7 +235,7 @@ echo " Swagger: http://$PUBLIC_IP:8080/index.html"
 echo "===================================================="
 
 # ============================================================
-# COMANDOS PARA DEPLOY (executar apos conectar na VM via SSH)
+# COMANDOS PARA DEPLOY (executar após conectar na VM via SSH)
 # ============================================================
 # ssh petguardian-adm@<IP_DA_VM>
 # git clone https://github.com/Challenge-Pet-Guardian/DevOps-Tools-Cloud-Computing.git
