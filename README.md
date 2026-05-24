@@ -17,7 +17,7 @@
 ---
 ## Repositório Github e Vídeo Youtube
 
-[Repositório Github](https://github.com/Challenge-Pet-Guardian/DevOps-Tools-Cloud-Computing) | [Vídeo Youtube](https://youtu.be/Xzz9GBONKa4)
+[Repositório Github](https://github.com/Challenge-Pet-Guardian/DevOps-Tools-Cloud-Computing) | [Vídeo Youtube](https://youtu.be/-527YLVrnPA?si=3yqv67g0ibO2n-Ds)
 
 ---
 
